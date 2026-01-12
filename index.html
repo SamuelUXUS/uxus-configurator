@@ -1712,7 +1712,7 @@
                 body: JSON.stringify(data)
             });
 
-            if (response.ok || WEBHOOK_URL === 'YOUR_MAKE_WEBHOOK_URL_HERE') {
+            if (response.ok || WEBHOOK_URL === 'https://hook.eu1.make.com/67w8pi9mr18nk6exxsee5ejxxv7t383w') {
                 // Success
                 loadingOverlay.classList.remove('active');
                 document.getElementById('configForm').style.display = 'none';
@@ -1730,7 +1730,7 @@
             submitBtn.disabled = false;
             
             // For testing without webhook
-            if (WEBHOOK_URL === 'YOUR_MAKE_WEBHOOK_URL_HERE') {
+            if (WEBHOOK_URL === 'https://hook.eu1.make.com/67w8pi9mr18nk6exxsee5ejxxv7t383w') {
                 document.getElementById('configForm').style.display = 'none';
                 document.getElementById('successMessage').classList.add('active');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
