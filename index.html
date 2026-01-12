@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UXUS Vehicle Configuration</title>
+    <style>
+        :root {
+            --uxus-green: #06402B;
+            --uxus-green-light: #0a5c3e;
+            --uxus-tan: #D6B588;
+            --uxus-gold: #BB8D64;
+            --uxus-champagne: #F7E6CA;
+            --uxus-black: #252525;
+            --uxus-white: #FAFAFA;
+            --gray-100: #f5f5f5;
+            --gray-200: #eeeeee;
+            --gray-300: #e0e0e0;
+            --gray-500: #9e9e9e;
+            --gray-700: #616161;
+            --error: #c62828;
+            --success: #2e7d32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--uxus-black);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--uxus-green);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 12px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 8px;
+        }
+
+        .header .tagline {
+            color: var(--uxus-tan);
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .header .form-title {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        /* Form sections */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--uxus-green);
+            color: white;
+            padding: 16px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: var(--uxus-green-light);
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .section-header .toggle {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .section-header.collapsed .toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 24px;
+            display: block;
+        }
+
+        .section-content.hidden {
+            display: none;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--uxus-black);
+        }
+
+        label.required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--uxus-green);
+            box-shadow: 0 0 0 3px rgba(6, 64, 43, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Checkbox grid for options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 16px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            border: 2px solid transparent;
+        }
+
+        .option-item:hover {
+            background: var(--gray-200);
+        }
+
+        .option-item.selected {
+            background: var(--uxus-champagne);
+            border-color: var(--uxus-tan);
+        }
+
+        .option-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 2px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--uxus-green);
+        }
+
+        .option-details {
+            flex: 1;
+        }
+
+        .option-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--uxus-black);
+        }
+
+        .option-code {
+            font-size: 11px;
+            color: var(--gray-500);
+            font-family: 'Courier New', monospace;
+            margin-top: 2px;
+        }
+
+        .option-note {
+            font-size: 12px;
+            color: var(--gray-700);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Category divider */
+        .category-divider {
+            grid-column: 1 / -1;
+            padding: 12px 0 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--uxus-green);
+            border-bottom: 2px solid var(--uxus-tan);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-divider:first-child {
+            margin-top: 0;
+        }
+
+        /* Remarks section styling */
+        .remarks-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .remarks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .remark-box {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .remark-box label {
+            color: var(--uxus-green);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .remark-box textarea {
+            margin-top: 8px;
+            min-height: 80px;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            color: #e65100;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            color: #1565c0;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            font-size: 14px;
+        }
+
+        /* Submit button */
+        .submit-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .submit-btn {
+            background: var(--uxus-green);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background: var(--uxus-green-light);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            background: var(--gray-500);
+            cursor: not-allowed;
+        }
+
+        .submit-note {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+
+        /* Summary panel */
+        .summary-panel {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }
+
+        .summary-panel h3 {
+            color: var(--uxus-green);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--uxus-tan);
+        }
+
+        .summary-count {
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--uxus-green);
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-300);
+            border-top-color: var(--uxus-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 16px;
+            color: var(--uxus-green);
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: var(--uxus-green);
+            margin-bottom: 12px;
+        }
+
+        .success-message p {
+            color: var(--gray-700);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--gray-500);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--uxus-green);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Submitting configuration...</div>
+</div>
+
+<div class="container">
+    <header class="header">
+        <h1>UXUS</h1>
+        <div class="tagline">BESPOKE LUXURY AUTOMOTIVE</div>
+        <div class="form-title">Vehicle Configuration Form</div>
+    </header>
+
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <h2>Configuration Submitted</h2>
+        <p>Thank you. Your vehicle specification has been received and sent to our team. We will contact you within 48 hours to discuss your configuration.</p>
+    </div>
+
+    <form id="configForm">
+        <!-- Client Information -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Client Information</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required" for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="country">Country</label>
+                        <select id="country" name="country" required>
+                            <option value="">Select country...</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="BE">Belgium</option>
+                            <option value="DE">Germany</option>
+                            <option value="ES">Spain</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="AT">Austria</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="referral">How did you hear about us?</label>
+                        <select id="referral" name="referral">
+                            <option value="">Select...</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="referral">Friend/Referral</option>
+                            <option value="event">Event/Show</option>
+                            <option value="search">Google Search</option>
+                            <option value="press">Press/Media</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Base Vehicle -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Base Vehicle</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ</span>
+                    <div class="alert-content">
+                        Select the base vehicle for your UXUS build. This determines available options throughout the configuration.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Base Vehicle Selection</label>
+                    <div class="options-grid" id="baseVehicleOptions">
+                        <label class="option-item" data-code="BAS-AUT-001" data-hybrid="false">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-001" required>
+                            <div class="option-details">
+                                <div class="option-name">Jeep Wrangler 392 V8</div>
+                                <div class="option-code">BAS-AUT-001</div>
+                                <div class="option-note">6.4L V8, 470 HP</div>
+                            </div>
+                        </label>
+                        <label class="option-item" data-code="BAS-AUT-002" data-hybrid="false">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-002">
+                            <div class="option-details">
+                                <div class="option-name">Jeep Wrangler Rubicon 3.6</div>
+                                <div class="option-code">BAS-AUT-002</div>
+                                <div class="option-note">3.6L V6, 285 HP</div>
+                            </div>
+                        </label>
+                        <label class="option-item" data-code="BAS-AUT-003" data-hybrid="false">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-003">
+                            <div class="option-details">
+                                <div class="option-name">Jeep Wrangler Sahara 3.6</div>
+                                <div class="option-code">BAS-AUT-003</div>
+                                <div class="option-note">3.6L V6, 285 HP</div>
+                            </div>
+                        </label>
+                        <label class="option-item" data-code="BAS-AUT-004" data-hybrid="true">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-004">
+                            <div class="option-details">
+                                <div class="option-name">Jeep Wrangler 4xe Hybrid</div>
+                                <div class="option-code">BAS-AUT-004</div>
+                                <div class="option-note">2.0L + Electric, 375 HP combined</div>
+                            </div>
+                        </label>
+                        <label class="option-item" data-code="BAS-AUT-005" data-hybrid="false">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-005">
+                            <div class="option-details">
+                                <div class="option-name">Jeep Gladiator Rubicon</div>
+                                <div class="option-code">BAS-AUT-005</div>
+                                <div class="option-note">3.6L V6, Pickup variant</div>
+                            </div>
+                        </label>
+                        <label class="option-item" data-code="BAS-AUT-006" data-hybrid="false">
+                            <input type="radio" name="baseVehicle" value="BAS-AUT-006">
+                            <div class="option-details">
+                                <div class="option-name">Client's Own Vehicle</div>
+                                <div class="option-code">BAS-AUT-006</div>
+                                <div class="option-note">Specify in remarks</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleColor">Current/Desired Base Color</label>
+                    <input type="text" id="vehicleColor" name="vehicleColor" placeholder="e.g., Black, White, Sarge Green...">
+                </div>
+
+                <div class="form-group">
+                    <label for="registration">Registration Requirements</label>
+                    <select id="registration" name="registration">
+                        <option value="">Select...</option>
+                        <option value="SPC-REG-001">Dutch Registration (RDW)</option>
+                        <option value="SPC-REG-002">Belgian Registration</option>
+                        <option value="SPC-REG-003">German Registration (TÜV)</option>
+                        <option value="SPC-REG-004">Spanish Registration</option>
+                        <option value="SPC-REG-005">Export (No Registration)</option>
+                        <option value="SPC-REG-006">Other EU Country</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- UXUS Standard (Included) -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>UXUS Standard Package</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="alert alert-info">
+                    <span class="alert-icon">✓</span>
+                    <div class="alert-content">
+                        <strong>Included in every UXUS build.</strong> These items are standard and cannot be removed.
+                    </div>
+                </div>
+                
+                <div class="options-grid">
+                    <div class="category-divider">Exterior Standard</div>
+                    
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Full Exterior Respray</div>
+                            <div class="option-code">UXS-SPT-001</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Color-Matched Fender Flares</div>
+                            <div class="option-code">UXS-SPT-002</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Color-Matched Hardtop</div>
+                            <div class="option-code">UXS-SPT-003</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Debadging</div>
+                            <div class="option-code">UXS-WRK-001</div>
+                        </div>
+                    </div>
+
+                    <div class="category-divider">Interior Standard</div>
+                    
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Full Leather Interior Retrim</div>
+                            <div class="option-code">UXS-BKL-001</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Leather Dashboard</div>
+                            <div class="option-code">UXS-BKL-002</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Leather Door Cards</div>
+                            <div class="option-code">UXS-BKL-003</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Premium Floor Mats</div>
+                            <div class="option-code">UXS-BKL-004</div>
+                        </div>
+                    </div>
+
+                    <div class="category-divider">Quality Assurance</div>
+                    
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Full Vehicle Inspection</div>
+                            <div class="option-code">UXS-WRK-002</div>
+                        </div>
+                    </div>
+                    <div class="option-item selected" style="cursor: default;">
+                        <input type="checkbox" checked disabled>
+                        <div class="option-details">
+                            <div class="option-name">Professional Detailing</div>
+                            <div class="option-code">UXS-WRK-003</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interior Options -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Interior Options</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="options-grid" id="interiorOptions">
+                    
+                    <div class="category-divider">Leather & Materials</div>
+                    
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-001">
+                        <div class="option-details">
+                            <div class="option-name">Premium Nappa Leather Upgrade</div>
+                            <div class="option-code">INT-BKL-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-002">
+                        <div class="option-details">
+                            <div class="option-name">Two-Tone Leather Interior</div>
+                            <div class="option-code">INT-BKL-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-003">
+                        <div class="option-details">
+                            <div class="option-name">Alcantara Headliner</div>
+                            <div class="option-code">INT-BKL-003</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-004">
+                        <div class="option-details">
+                            <div class="option-name">Alcantara Pillars</div>
+                            <div class="option-code">INT-BKL-004</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-005">
+                        <div class="option-details">
+                            <div class="option-name">Diamond Stitching Pattern</div>
+                            <div class="option-code">INT-BKL-005</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-006">
+                        <div class="option-details">
+                            <div class="option-name">Hexagon Stitching Pattern</div>
+                            <div class="option-code">INT-BKL-006</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-007">
+                        <div class="option-details">
+                            <div class="option-name">Contrast Stitching</div>
+                            <div class="option-code">INT-BKL-007</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-008">
+                        <div class="option-details">
+                            <div class="option-name">Custom Perforation Pattern</div>
+                            <div class="option-code">INT-BKL-008</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Seating</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-010">
+                        <div class="option-details">
+                            <div class="option-name">Heated Front Seats</div>
+                            <div class="option-code">INT-BKL-010</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-011">
+                        <div class="option-details">
+                            <div class="option-name">Ventilated Front Seats</div>
+                            <div class="option-code">INT-BKL-011</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-012">
+                        <div class="option-details">
+                            <div class="option-name">Massage Function Front Seats</div>
+                            <div class="option-code">INT-BKL-012</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-013">
+                        <div class="option-details">
+                            <div class="option-name">Rear Bench Delete (2-seater)</div>
+                            <div class="option-code">INT-BKL-013</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-BKL-014">
+                        <div class="option-details">
+                            <div class="option-name">Embroidered Headrests</div>
+                            <div class="option-code">INT-BKL-014</div>
+                            <div class="option-note">Custom logo/initials</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Trim & Details</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-001">
+                        <div class="option-details">
+                            <div class="option-name">Carbon Fiber Interior Trim</div>
+                            <div class="option-code">INT-OND-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-002">
+                        <div class="option-details">
+                            <div class="option-name">Piano Black Interior Trim</div>
+                            <div class="option-code">INT-OND-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-003">
+                        <div class="option-details">
+                            <div class="option-name">Brushed Aluminum Trim</div>
+                            <div class="option-code">INT-OND-003</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-004">
+                        <div class="option-details">
+                            <div class="option-name">Wood Trim Package</div>
+                            <div class="option-code">INT-OND-004</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-005">
+                        <div class="option-details">
+                            <div class="option-name">Custom Steering Wheel</div>
+                            <div class="option-code">INT-OND-005</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-006">
+                        <div class="option-details">
+                            <div class="option-name">Shift Knob Upgrade</div>
+                            <div class="option-code">INT-OND-006</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-007">
+                        <div class="option-details">
+                            <div class="option-name">Pedal Set Aluminum</div>
+                            <div class="option-code">INT-OND-007</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Electronics & Comfort</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-010">
+                        <div class="option-details">
+                            <div class="option-name">Premium Sound System Upgrade</div>
+                            <div class="option-code">INT-OND-010</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-011">
+                        <div class="option-details">
+                            <div class="option-name">Subwoofer Installation</div>
+                            <div class="option-code">INT-OND-011</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-012">
+                        <div class="option-details">
+                            <div class="option-name">Ambient Lighting Package</div>
+                            <div class="option-code">INT-OND-012</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-013">
+                        <div class="option-details">
+                            <div class="option-name">Rear Entertainment System</div>
+                            <div class="option-code">INT-OND-013</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-014">
+                        <div class="option-details">
+                            <div class="option-name">Wireless Charging Pad</div>
+                            <div class="option-code">INT-OND-014</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="INT-OND-015">
+                        <div class="option-details">
+                            <div class="option-name">Dashcam Integration</div>
+                            <div class="option-code">INT-OND-015</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exterior Options -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Exterior Options</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="options-grid" id="exteriorOptions">
+                    
+                    <div class="category-divider">Paint & Finish</div>
+                    
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-001">
+                        <div class="option-details">
+                            <div class="option-name">Metallic Paint</div>
+                            <div class="option-code">EXT-SPT-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-002">
+                        <div class="option-details">
+                            <div class="option-name">Matte Finish</div>
+                            <div class="option-code">EXT-SPT-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-003">
+                        <div class="option-details">
+                            <div class="option-name">Satin Finish</div>
+                            <div class="option-code">EXT-SPT-003</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-004">
+                        <div class="option-details">
+                            <div class="option-name">Two-Tone Exterior</div>
+                            <div class="option-code">EXT-SPT-004</div>
+                            <div class="option-note">Roof/body different colors</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-005">
+                        <div class="option-details">
+                            <div class="option-name">Custom Color Match</div>
+                            <div class="option-code">EXT-SPT-005</div>
+                            <div class="option-note">Porsche, Ferrari, custom RAL</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-006">
+                        <div class="option-details">
+                            <div class="option-name">Ceramic Coating</div>
+                            <div class="option-code">EXT-SPT-006</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-SPT-007">
+                        <div class="option-details">
+                            <div class="option-name">Paint Protection Film (PPF)</div>
+                            <div class="option-code">EXT-SPT-007</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Wheels & Tires</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-001">
+                        <div class="option-details">
+                            <div class="option-name">20" Forged Wheels</div>
+                            <div class="option-code">EXT-OND-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-002">
+                        <div class="option-details">
+                            <div class="option-name">22" Forged Wheels</div>
+                            <div class="option-code">EXT-OND-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-003">
+                        <div class="option-details">
+                            <div class="option-name">Custom Wheel Finish</div>
+                            <div class="option-code">EXT-OND-003</div>
+                            <div class="option-note">Color-matched or contrast</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-004">
+                        <div class="option-details">
+                            <div class="option-name">All-Terrain Tires</div>
+                            <div class="option-code">EXT-OND-004</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-005">
+                        <div class="option-details">
+                            <div class="option-name">Highway Tires</div>
+                            <div class="option-code">EXT-OND-005</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-006">
+                        <div class="option-details">
+                            <div class="option-name">Colored Brake Calipers</div>
+                            <div class="option-code">EXT-OND-006</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Body & Lighting</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-010">
+                        <div class="option-details">
+                            <div class="option-name">Wide Body Kit</div>
+                            <div class="option-code">EXT-OND-010</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-011">
+                        <div class="option-details">
+                            <div class="option-name">Carbon Fiber Hood</div>
+                            <div class="option-code">EXT-OND-011</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-012">
+                        <div class="option-details">
+                            <div class="option-name">Carbon Fiber Mirrors</div>
+                            <div class="option-code">EXT-OND-012</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-013">
+                        <div class="option-details">
+                            <div class="option-name">Blackout Package</div>
+                            <div class="option-code">EXT-OND-013</div>
+                            <div class="option-note">All chrome deleted</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-014">
+                        <div class="option-details">
+                            <div class="option-name">LED Headlight Upgrade</div>
+                            <div class="option-code">EXT-OND-014</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-015">
+                        <div class="option-details">
+                            <div class="option-name">Smoked Tail Lights</div>
+                            <div class="option-code">EXT-OND-015</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-016">
+                        <div class="option-details">
+                            <div class="option-name">Side Steps / Rock Sliders</div>
+                            <div class="option-code">EXT-OND-016</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-017">
+                        <div class="option-details">
+                            <div class="option-name">Snorkel Installation</div>
+                            <div class="option-code">EXT-OND-017</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-018">
+                        <div class="option-details">
+                            <div class="option-name">Winch & Bumper Package</div>
+                            <div class="option-code">EXT-OND-018</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-019">
+                        <div class="option-details">
+                            <div class="option-name">Roof Rack System</div>
+                            <div class="option-code">EXT-OND-019</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="EXT-OND-020">
+                        <div class="option-details">
+                            <div class="option-name">Spare Tire Delete</div>
+                            <div class="option-code">EXT-OND-020</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driveability Options -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Driveability & Performance</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="alert alert-info">
+                    <span class="alert-icon">★</span>
+                    <div class="alert-content">
+                        <strong>UXUS Specialty:</strong> We are the only Jeep Wrangler specialist focused on improving daily driveability. These upgrades transform the driving experience.
+                    </div>
+                </div>
+
+                <div class="options-grid" id="driveOptions">
+                    
+                    <div class="category-divider">Suspension</div>
+                    
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-001">
+                        <div class="option-details">
+                            <div class="option-name">Performance Suspension Kit</div>
+                            <div class="option-code">DRV-OND-001</div>
+                            <div class="option-note">Improved comfort & handling</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-002">
+                        <div class="option-details">
+                            <div class="option-name">Adjustable Coilovers</div>
+                            <div class="option-code">DRV-OND-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-003">
+                        <div class="option-details">
+                            <div class="option-name">Air Suspension Conversion</div>
+                            <div class="option-code">DRV-OND-003</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-004">
+                        <div class="option-details">
+                            <div class="option-name">Anti-Sway Bar Upgrade</div>
+                            <div class="option-code">DRV-OND-004</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Braking</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-010">
+                        <div class="option-details">
+                            <div class="option-name">Brembo Brake System</div>
+                            <div class="option-code">DRV-OND-010</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-011">
+                        <div class="option-details">
+                            <div class="option-name">Big Brake Kit</div>
+                            <div class="option-code">DRV-OND-011</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-012">
+                        <div class="option-details">
+                            <div class="option-name">Slotted/Drilled Rotors</div>
+                            <div class="option-code">DRV-OND-012</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Steering & Handling</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-020">
+                        <div class="option-details">
+                            <div class="option-name">Steering Stabilizer</div>
+                            <div class="option-code">DRV-OND-020</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-021">
+                        <div class="option-details">
+                            <div class="option-name">Heavy-Duty Steering Upgrade</div>
+                            <div class="option-code">DRV-OND-021</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-022">
+                        <div class="option-details">
+                            <div class="option-name">Track Bar Upgrade</div>
+                            <div class="option-code">DRV-OND-022</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Exhaust</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-030">
+                        <div class="option-details">
+                            <div class="option-name">Performance Exhaust System</div>
+                            <div class="option-code">DRV-OND-030</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-031">
+                        <div class="option-details">
+                            <div class="option-name">Sport Exhaust Tips</div>
+                            <div class="option-code">DRV-OND-031</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="DRV-OND-032">
+                        <div class="option-details">
+                            <div class="option-name">Active Exhaust Valves</div>
+                            <div class="option-code">DRV-OND-032</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Engine Options -->
+        <div class="form-section" id="engineSection">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Engine & Power</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="alert alert-warning" id="hybridWarning" style="display: none;">
+                    <span class="alert-icon">⚠</span>
+                    <div class="alert-content">
+                        <strong>Hybrid Vehicle Selected:</strong> Engine swap options are not available for the 4xe Hybrid due to the integrated electric system.
+                    </div>
+                </div>
+
+                <div class="options-grid" id="engineOptions">
+                    
+                    <div class="category-divider">Engine Swaps</div>
+                    
+                    <label class="option-item engine-swap">
+                        <input type="checkbox" name="options" value="ENG-WRK-001">
+                        <div class="option-details">
+                            <div class="option-name">HEMI V8 Swap (6.4L)</div>
+                            <div class="option-code">ENG-WRK-001</div>
+                            <div class="option-note">470+ HP</div>
+                        </div>
+                    </label>
+                    <label class="option-item engine-swap">
+                        <input type="checkbox" name="options" value="ENG-WRK-002">
+                        <div class="option-details">
+                            <div class="option-name">Hellcat V8 Swap (6.2L SC)</div>
+                            <div class="option-code">ENG-WRK-002</div>
+                            <div class="option-note">700+ HP</div>
+                        </div>
+                    </label>
+                    <label class="option-item engine-swap">
+                        <input type="checkbox" name="options" value="ENG-WRK-003">
+                        <div class="option-details">
+                            <div class="option-name">Coyote V8 Swap (5.0L)</div>
+                            <div class="option-code">ENG-WRK-003</div>
+                            <div class="option-note">Ford 5.0, 460+ HP</div>
+                        </div>
+                    </label>
+                    <label class="option-item engine-swap">
+                        <input type="checkbox" name="options" value="ENG-WRK-004">
+                        <div class="option-details">
+                            <div class="option-name">LS3 V8 Swap (6.2L)</div>
+                            <div class="option-code">ENG-WRK-004</div>
+                            <div class="option-note">GM LS3, 430+ HP</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Performance Upgrades</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-001">
+                        <div class="option-details">
+                            <div class="option-name">Cold Air Intake</div>
+                            <div class="option-code">ENG-OND-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-002">
+                        <div class="option-details">
+                            <div class="option-name">Supercharger Kit</div>
+                            <div class="option-code">ENG-OND-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-003">
+                        <div class="option-details">
+                            <div class="option-name">ECU Tune / Remap</div>
+                            <div class="option-code">ENG-OND-003</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-004">
+                        <div class="option-details">
+                            <div class="option-name">Upgraded Cooling System</div>
+                            <div class="option-code">ENG-OND-004</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-005">
+                        <div class="option-details">
+                            <div class="option-name">Transmission Upgrade</div>
+                            <div class="option-code">ENG-OND-005</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="ENG-OND-006">
+                        <div class="option-details">
+                            <div class="option-name">Differential Upgrade</div>
+                            <div class="option-code">ENG-OND-006</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special / Delivery -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Delivery & Special Items</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="options-grid">
+                    
+                    <div class="category-divider">Delivery Options</div>
+                    
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DEL-001">
+                        <div class="option-details">
+                            <div class="option-name">Amsterdam Pickup</div>
+                            <div class="option-code">SPC-DEL-001</div>
+                            <div class="option-note">Collect from workshop</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DEL-002">
+                        <div class="option-details">
+                            <div class="option-name">Ibiza Delivery</div>
+                            <div class="option-code">SPC-DEL-002</div>
+                            <div class="option-note">Collect from showroom</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DEL-003">
+                        <div class="option-details">
+                            <div class="option-name">European Delivery</div>
+                            <div class="option-code">SPC-DEL-003</div>
+                            <div class="option-note">Enclosed transport</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DEL-004">
+                        <div class="option-details">
+                            <div class="option-name">International Shipping</div>
+                            <div class="option-code">SPC-DEL-004</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Documentation</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DOC-001">
+                        <div class="option-details">
+                            <div class="option-name">Build Documentation Package</div>
+                            <div class="option-code">SPC-DOC-001</div>
+                            <div class="option-note">Photo book of build process</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-DOC-002">
+                        <div class="option-details">
+                            <div class="option-name">Video Documentation</div>
+                            <div class="option-code">SPC-DOC-002</div>
+                        </div>
+                    </label>
+
+                    <div class="category-divider">Accessories</div>
+
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-ACC-001">
+                        <div class="option-details">
+                            <div class="option-name">Custom Car Cover</div>
+                            <div class="option-code">SPC-ACC-001</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-ACC-002">
+                        <div class="option-details">
+                            <div class="option-name">Matching Luggage Set</div>
+                            <div class="option-code">SPC-ACC-002</div>
+                        </div>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" name="options" value="SPC-ACC-003">
+                        <div class="option-details">
+                            <div class="option-name">Owner's Welcome Kit</div>
+                            <div class="option-code">SPC-ACC-003</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="form-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2>Special Requests & Remarks</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="alert alert-info">
+                    <span class="alert-icon">✎</span>
+                    <div class="alert-content">
+                        Use these fields for specific requests, inspiration references, or details about custom options.
+                    </div>
+                </div>
+
+                <div class="remarks-grid">
+                    <div class="remark-box">
+                        <label for="remarksInterior">Interior Remarks</label>
+                        <textarea id="remarksInterior" name="remarksInterior" placeholder="Specific leather colors, stitching patterns, material references, inspiration images..."></textarea>
+                    </div>
+                    <div class="remark-box">
+                        <label for="remarksExterior">Exterior Remarks</label>
+                        <textarea id="remarksExterior" name="remarksExterior" placeholder="Paint codes, color references, specific finish requests..."></textarea>
+                    </div>
+                    <div class="remark-box">
+                        <label for="remarksDriveability">Driveability Remarks</label>
+                        <textarea id="remarksDriveability" name="remarksDriveability" placeholder="Driving style preferences, specific handling requests..."></textarea>
+                    </div>
+                    <div class="remark-box">
+                        <label for="remarksEngine">Engine/Power Remarks</label>
+                        <textarea id="remarksEngine" name="remarksEngine" placeholder="Power targets, sound preferences, specific requirements..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="remarksDelivery">Delivery & Timeline</label>
+                    <textarea id="remarksDelivery" name="remarksDelivery" placeholder="Preferred delivery date, special events, timeline constraints..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="remarksGeneral">General Notes</label>
+                    <textarea id="remarksGeneral" name="remarksGeneral" placeholder="Any other information we should know..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary & Submit -->
+        <div class="submit-section">
+            <div id="summaryDisplay" style="margin-bottom: 20px;">
+                <span class="summary-count" id="optionCount">0</span>
+                <span class="summary-label"> options selected</span>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Configuration</button>
+            <p class="submit-note">
+                By submitting, you agree to be contacted by UXUS regarding your vehicle configuration.
+                <br>This is not a purchase commitment. Our team will prepare a detailed quotation.
+            </p>
+        </div>
+    </form>
+
+    <footer class="footer">
+        <p>UXUS Bespoke Luxury Automotive</p>
+        <p>Amsterdam • Ibiza</p>
+        <p><a href="https://uxus.nl">www.uxus.nl</a> • <a href="mailto:info@uxus.nl">info@uxus.nl</a></p>
+    </footer>
+</div>
+
+<script>
+    // Configuration
+    const WEBHOOK_URL = 'YOUR_MAKE_WEBHOOK_URL_HERE'; // Replace with Make.com webhook URL
+
+    // Toggle section visibility
+    function toggleSection(header) {
+        header.classList.toggle('collapsed');
+        const content = header.nextElementSibling;
+        content.classList.toggle('hidden');
+    }
+
+    // Handle option selection styling
+    document.querySelectorAll('.option-item input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            this.closest('.option-item').classList.toggle('selected', this.checked);
+            updateOptionCount();
+        });
+    });
+
+    // Handle radio button selection styling
+    document.querySelectorAll('.option-item input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Remove selected from all in group
+            document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => {
+                r.closest('.option-item').classList.remove('selected');
+            });
+            // Add selected to current
+            this.closest('.option-item').classList.add('selected');
+            
+            // Handle hybrid vehicle logic
+            if (this.name === 'baseVehicle') {
+                handleHybridLogic(this);
+            }
+        });
+    });
+
+    // Handle hybrid vehicle - disable engine swaps
+    function handleHybridLogic(selectedRadio) {
+        const isHybrid = selectedRadio.closest('.option-item').dataset.hybrid === 'true';
+        const engineSwaps = document.querySelectorAll('.engine-swap');
+        const hybridWarning = document.getElementById('hybridWarning');
+
+        engineSwaps.forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (isHybrid) {
+                item.classList.add('disabled');
+                checkbox.checked = false;
+                checkbox.disabled = true;
+                item.classList.remove('selected');
+            } else {
+                item.classList.remove('disabled');
+                checkbox.disabled = false;
+            }
+        });
+
+        hybridWarning.style.display = isHybrid ? 'flex' : 'none';
+        updateOptionCount();
+    }
+
+    // Update option count
+    function updateOptionCount() {
+        const count = document.querySelectorAll('input[name="options"]:checked').length;
+        document.getElementById('optionCount').textContent = count;
+    }
+
+    // Generate order ID
+    function generateOrderId() {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2);
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `UXS-${year}${month}-${random}`;
+    }
+
+    // Collect form data
+    function collectFormData() {
+        const form = document.getElementById('configForm');
+        const formData = new FormData(form);
+        
+        const orderId = generateOrderId();
+        const timestamp = new Date().toISOString();
+
+        // Client info
+        const clientData = {
+            orderId: orderId,
+            timestamp: timestamp,
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            email: formData.get('email'),
+            phone: formData.get('phone') || '',
+            country: formData.get('country'),
+            referral: formData.get('referral') || ''
+        };
+
+        // Base vehicle
+        const baseVehicle = formData.get('baseVehicle');
+        const baseVehicleElement = document.querySelector(`input[value="${baseVehicle}"]`);
+        const baseVehicleName = baseVehicleElement ? 
+            baseVehicleElement.closest('.option-item').querySelector('.option-name').textContent : '';
+
+        clientData.baseVehicle = baseVehicle;
+        clientData.baseVehicleName = baseVehicleName;
+        clientData.vehicleColor = formData.get('vehicleColor') || '';
+        clientData.registration = formData.get('registration') || '';
+
+        // Selected options
+        const selectedOptions = [];
+        document.querySelectorAll('input[name="options"]:checked').forEach(checkbox => {
+            const item = checkbox.closest('.option-item');
+            const code = checkbox.value;
+            const name = item.querySelector('.option-name').textContent;
+            const category = getCategory(code);
+            const department = getDepartment(code);
+            
+            selectedOptions.push({
+                code: code,
+                name: name,
+                category: category,
+                department: department
+            });
+        });
+
+        clientData.options = selectedOptions;
+        clientData.optionCount = selectedOptions.length;
+        clientData.optionCodes = selectedOptions.map(o => o.code).join(', ');
+
+        // Remarks
+        clientData.remarks = {
+            interior: formData.get('remarksInterior') || '',
+            exterior: formData.get('remarksExterior') || '',
+            driveability: formData.get('remarksDriveability') || '',
+            engine: formData.get('remarksEngine') || '',
+            delivery: formData.get('remarksDelivery') || '',
+            general: formData.get('remarksGeneral') || ''
+        };
+
+        // Department-specific items
+        clientData.departments = {
+            upholstery: selectedOptions.filter(o => o.department === 'upholstery'),
+            paint: selectedOptions.filter(o => o.department === 'paint'),
+            mechanics: selectedOptions.filter(o => o.department === 'mechanics'),
+            parts: selectedOptions.filter(o => o.department === 'parts')
+        };
+
+        return clientData;
+    }
+
+    // Get category from code
+    function getCategory(code) {
+        const prefix = code.split('-')[0];
+        const categories = {
+            'BAS': 'Basis',
+            'UXS': 'UXUS Standard',
+            'INT': 'Interior',
+            'EXT': 'Exterior',
+            'DRV': 'Driveability',
+            'ENG': 'Engine',
+            'SPC': 'Special'
+        };
+        return categories[prefix] || 'Other';
+    }
+
+    // Get department from code
+    function getDepartment(code) {
+        const type = code.split('-')[1];
+        if (type === 'BKL') return 'upholstery';
+        if (type === 'SPT') return 'paint';
+        if (type === 'WRK' && code.startsWith('ENG')) return 'mechanics';
+        if (code.startsWith('DRV') || code.startsWith('ENG')) return 'mechanics';
+        if (type === 'OND') return 'parts';
+        return 'general';
+    }
+
+    // Form submission
+    document.getElementById('configForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        submitBtn.disabled = true;
+        loadingOverlay.classList.add('active');
+
+        const data = collectFormData();
+
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok || WEBHOOK_URL === 'YOUR_MAKE_WEBHOOK_URL_HERE') {
+                // Success
+                loadingOverlay.classList.remove('active');
+                document.getElementById('configForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Log data for testing (remove in production)
+                console.log('Form Data:', JSON.stringify(data, null, 2));
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            loadingOverlay.classList.remove('active');
+            submitBtn.disabled = false;
+            
+            // For testing without webhook
+            if (WEBHOOK_URL === 'YOUR_MAKE_WEBHOOK_URL_HERE') {
+                document.getElementById('configForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                console.log('TEST MODE - Form Data:', JSON.stringify(data, null, 2));
+            } else {
+                alert('There was an error submitting your configuration. Please try again or contact us directly.');
+            }
+        }
+    });
+
+    // Initialize
+    updateOptionCount();
+</script>
+
+</body>
+</html>
